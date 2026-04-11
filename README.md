@@ -191,7 +191,7 @@ npm run preview
 
 
 
-## 📦 Server Setup
+## 📁 Server Setup
 
 ```bash
 npm init -y
