@@ -139,8 +139,6 @@ Create `index.html` in root/client folder:
 ### `src/App.tsx`
 
 ```tsx
-import { useState } from "react";
-
 export default function App() {
   return <h1>Hello World</h1>;
 }
