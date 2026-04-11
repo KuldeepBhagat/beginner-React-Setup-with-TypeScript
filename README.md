@@ -188,3 +188,188 @@ npm run build
 ```bash
 npm run preview
 ```
+
+
+
+## 📦 Server Setup
+
+```bash
+npm init -y
+```
+
+---
+
+## 📥 Install Dependencies
+
+```bash
+npm install express cors dotenv
+```
+
+---
+
+## 📥 Install Dev Dependencies (TypeScript)
+
+```bash
+npm install -D typescript @types/express @types/node @types/cors tsx
+```
+
+---
+
+## ⚙️ Update `package.json`
+
+Add:
+
+```json
+"type": "module",
+"scripts": {
+  "dev": "tsx watch src/index.ts",
+  "build": "tsc",
+  "start": "node dist/index.js"
+}
+```
+
+---
+
+## ⚙️ TypeScript Configuration
+
+Generate config:
+
+```bash
+npx tsc --init
+```
+
+Update `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true
+  }
+}
+```
+
+---
+
+## 📁 Server Entry Point
+
+Create `src/index.ts`:
+
+```ts
+import express, { type Request, type Response } from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+
+// Initialize environment variables
+dotenv.config();
+
+const app = express();
+const PORT = 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Health Check Route
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json({ message: "Server is healthy" });
+});
+
+// Test API Route
+app.get("/api/test", (req: Request, res: Response) => {
+  res.json({
+    message: "Backend is connected!",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+```
+
+---
+
+# 🔗 Connecting Frontend to Backend
+
+## Update `App.tsx`
+
+```tsx
+import { useEffect, useState } from "react";
+
+export default function App() {
+  const [message, setMessage] = useState<string>("Loading...");
+
+  useEffect(() => {
+    const fetchTestData = async () => {
+      try {
+        const response = await fetch("/api/test");
+        const data = await response.json();
+        setMessage(data.message);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setMessage("Failed to connect to backend.");
+      }
+    };
+
+    fetchTestData();
+  }, []);
+
+  return (
+    <div className="p-8">
+      <h1 className="text-2xl font-bold text-blue-600">BookMyRoom Frontend</h1>
+      <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow">
+        <p className="text-gray-700">
+          Backend Status:{" "}
+          <span className="font-mono font-bold">{message}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+## ⚙️ Add Proxy in `vite.config.ts`
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true
+      }
+    }
+  }
+});
+```
+
+---
+
+## 🚀 Run Server
+
+```bash
+npm run dev
+```
+
+---
+
+## 🧪 Test
+
+- Backend: http://localhost:5000/api/test  
+- Frontend: http://localhost:5173  
+
+---
