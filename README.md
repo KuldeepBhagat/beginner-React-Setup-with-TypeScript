@@ -1,7 +1,5 @@
-# Modern-React-Setup-with-TypeScript
-A guide to setup React working environent with Typescript/Javascript alongside vite + tailwindcss
-
 # React + TypeScript Setup Guide (Vite)
+A guide to setup React working environent with Typescript/Javascript alongside vite + tailwindcss
 
 ## Prerequisites
 Make sure Node.js is installed on your system.
