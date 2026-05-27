@@ -190,7 +190,7 @@ npm run preview
 ```
 # ⚙️ Project Configuration Guide
 
-This project required a few additional configurations beyond a standard React setup. Below is a clear breakdown of the changes and why they were needed.
+There are some additional config required for a robust react environment that are mentioned below
 
 ---
 
