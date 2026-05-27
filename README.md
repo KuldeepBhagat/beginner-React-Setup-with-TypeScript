@@ -188,7 +188,96 @@ npm run build
 ```bash
 npm run preview
 ```
+# ⚙️ Project Configuration Guide
 
+This project required a few additional configurations beyond a standard React setup. Below is a clear breakdown of the changes and why they were needed.
+
+---
+
+## 🚦 1. Routing with React Router DOM
+
+React Router DOM is used to switch between different routes such as the Home page and Map pages.
+
+### 📦 Installation
+`npm install react-router-dom`
+
+### 🛠 Setup (`main.tsx`)
+```tsx
+import { BrowserRouter } from 'react-router-dom'
+import { StrictMode } from "react"; // helps in stability while development
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+
+root.render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
+```
+
+> 💡 `StrictMode` helps catch potential issues during development.
+
+---
+
+## 🧠 2. Fixing TypeScript Import Issues
+
+TypeScript throws errors when importing files other than `.ts` or `.tsx`.
+
+### ✅ Solution
+
+Create a file named `vite-env.d.ts` and add:
+
+```ts
+/// <reference types="vite/client" />
+```
+
+---
+
+## 🎨 3. Using SVGs as React Components (SVGR)
+
+SVG files are not easily manipulatable by default. To solve this, the **SVGR plugin** allows SVGs to be used as React components.
+
+### 📦 Installation
+`npm install -D vite-plugin-svgr`
+
+### 🛠 Update `vite.config.ts`
+```ts
+import svgr from "vite-plugin-svgr";
+
+export default {
+  plugins: [
+    react(),
+    tailwindcss(),
+    svgr({
+      include: '**/*.svg?react'
+    })
+  ],
+};
+```
+
+### 🛠 Update `vite-env.d.ts`
+```ts
+/// <reference types="vite-plugin-svgr/client" />
+```
+
+### 🚀 Usage Example
+```ts
+import FilterIcon from "../../assets/icons/Filter.svg?react";
+```
+
+---
+
+## 📌 Summary
+
+- 🔀 Routing handled using **React Router DOM**  
+- 🧩 TypeScript import issues fixed via `vite-env.d.ts`  
+- 🖼 SVGs used as React components with **SVGR**
+
+---
 
 
 ## 📁 Server Setup
